@@ -28,7 +28,7 @@ class TextExtractorService:
                 content = await file.read()
                 return content.decode('utf-8')
             except Exception as err:
-                print(f"Error while reading the file: {err}")
+                # print(f"Error while reading the file: {err}")
                 raise HTTPException(
                     status_code=400, detail=f"Failed to decode txt file: {err}")
 
