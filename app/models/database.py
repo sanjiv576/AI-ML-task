@@ -47,7 +47,7 @@ async def insert_document_metadata(filename: str, strategy: str, chunk_count: in
 
     try:
         document_id = str(uuid.uuid4())
-        print(f'uid: {document_id}')
+        # print(f'uid: {document_id}')
 
         metadata_doc = {
             "_id": document_id,
@@ -56,14 +56,14 @@ async def insert_document_metadata(filename: str, strategy: str, chunk_count: in
             "chunk_count": chunk_count,
             "uploaded_at": datetime.now(timezone.utc).isoformat()
         }
-        print(f"Metadata: {metadata_doc}")
+        # print(f"Metadata: {metadata_doc}")
 
         # insert doc metadata into db
         await metadata_collection.insert_one(metadata_doc)
         return document_id
 
     except Exception as err:
-        print(f"Error while insert document metadata: {err}")
+        # print(f"Error while insert document metadata: {err}")
         raise HTTPException(status_code=400, detail=f"{err}")
 
 
