@@ -122,3 +122,7 @@ uvicorn main:app --reload
 The service is deployed at:
 
 https://rag-bot-zgs8.onrender.com/
+
+## Demo
+
+[![RAG Bot Demo](https://img.youtube.com/vi/W9naX4NM32c/0.jpg)](https://www.youtube.com/watch?v=W9naX4NM32c)
