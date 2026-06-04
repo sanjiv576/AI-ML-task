@@ -1,7 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 from typing import Dict, Any
-
+from fastapi import HTTPException
 import os
 from dotenv import load_dotenv
 
@@ -57,14 +57,14 @@ async def insert_document_metadata(filename: str, strategy: str, chunk_count: in
             "uploaded_at": datetime.now(timezone.utc).isoformat()
         }
         print(f"Metadata: {metadata_doc}")
-        
+
         # insert doc metadata into db
         await metadata_collection.insert_one(metadata_doc)
         return document_id
 
     except Exception as err:
         print(f"Error while insert document metadata: {err}")
-        return f"{err}"
+        raise HTTPException(status_code=400, detail=f"{err}")
 
 
 async def insert_interview_booking(booking_data: InterviewBookingSchema) -> bool:
