@@ -1,7 +1,8 @@
 """This module extracts the text from the files (pdf/txt)"""
+import io
 import pdfplumber
 from fastapi import UploadFile, HTTPException
-from pydantic import str
+# from pydantic import str
 
 
 class TextExtractorService:
@@ -15,7 +16,12 @@ class TextExtractorService:
         Returns:
             str: text
         """
-        filename = file.filename.lower()
+        filename = file.filename
+        if not filename:
+            raise HTTPException(
+                status_code=400, detail="Uploaded file must have a filename")
+
+        filename = filename.lower()
 
         if filename.endswith(".txt"):
             try:
@@ -28,8 +34,9 @@ class TextExtractorService:
 
         elif filename.endswith(".pdf"):
             try:
+                content = await file.read()
                 text_content = []
-                with pdfplumber.open(file.file) as pdf:
+                with pdfplumber.open(io.BytesIO(content)) as pdf:
                     for page in pdf.pages:
                         page_text = page.extract_text()
                         if page_text:
@@ -46,3 +53,7 @@ class TextExtractorService:
                 print(f"Error while reading the file: {err}")
                 raise HTTPException(
                     status_code=400, detail=f"Failed to decode pdf file: {err}")
+
+        else:
+            raise HTTPException(
+                status_code=400, detail="Uploaded file's format is not supported.")
