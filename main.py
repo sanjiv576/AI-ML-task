@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from app.models.database import ping_mongodb
 from app.api.routes_ingest import router as ingest_router
 from app.api.routes_chat import router as chat_router
-from app.api.routes_interview_booking  import router as interview_booking_router
+# from app.api.routes_interview_booking import router as interview_booking_router
 import os
 from dotenv import load_dotenv
 
@@ -14,7 +14,8 @@ app = FastAPI()
 
 app.include_router(ingest_router)
 app.include_router(chat_router)
-app.include_router(interview_booking_router)
+# commenting interview booking route because booking is done from the conversation using LLM
+# app.include_router(interview_booking_router)
 
 
 @app.on_event("startup")
@@ -35,4 +36,4 @@ async def startup_event():
 @app.get('/', tags=["Health"])
 def root():
 
-    return JSONResponse(status_code=200, content={"message": f"Server is live at: {os.environ.get("MONGO_URL")}"})
+    return JSONResponse(status_code=200, content={"message": f"Server is live at: {os.environ.get('MONGO_URL')}"})
