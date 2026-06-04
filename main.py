@@ -1,5 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.models.database import ping_mongodb
 from app.api.routes_ingest import router as ingest_router
 from app.api.routes_chat import router as chat_router
@@ -33,7 +35,44 @@ async def startup_event():
         print("Initialization complete. All critical API keys are set up.")
 
 
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": "HTTPException",
+            "status_code": exc.status_code,
+            "detail": exc.detail,
+            "message": "Request failure. Check endpoint and payload format."
+        }
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": "RequestValidationError",
+            "detail": exc.errors(),
+            "body": exc.body,
+            "message": "Invalid request body or query parameters. Please send valid JSON."
+        }
+    )
+
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "InternalServerError",
+            "detail": str(exc),
+            "message": "The server encountered an unexpected error."
+        }
+    )
+
+
 @app.get('/', tags=["Health"])
 def root():
-
     return JSONResponse(status_code=200, content={"message": f"Server is live at: {os.environ.get('MONGO_URL')}"})
