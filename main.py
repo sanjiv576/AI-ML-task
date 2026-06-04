@@ -75,4 +75,4 @@ async def generic_exception_handler(request: Request, exc: Exception):
 
 @app.get('/', tags=["Health"])
 def root():
-    return JSONResponse(status_code=200, content={"message": f"Server is live at: {os.environ.get('MONGO_URL')}"})
+    return JSONResponse(status_code=200, content={"message": f"Server is live"})
