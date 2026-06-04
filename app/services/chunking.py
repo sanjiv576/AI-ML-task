@@ -25,7 +25,7 @@ class ChunkingService:
             chunks.append(text[start:end])
             start += (chunk_size - chunk_overlap)
 
-        print(f"Chunks: {chunks}")
+        # print(f"Chunks: {chunks}")
         return chunks
 
     @staticmethod
@@ -43,10 +43,10 @@ class ChunkingService:
         """
 
         tokenizer = tiktoken.encoding_for_model(model_name)
-        print(f"Tokenizer: {tokenizer}")
+        # print(f"Tokenizer: {tokenizer}")
 
         tokens = tokenizer.encode(text)
-        print("Tokens: ", tokens)
+        # print("Tokens: ", tokens)
 
         start = 0
         chunks = []
