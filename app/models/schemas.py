@@ -14,13 +14,13 @@ class ChunkingStrategy(str, Enum):
 
 class IngestResponse(BaseModel):
     document_id: Annotated[str, Field(..., description="Unique id for the stored document", examples=[
-                                      "T45S", "A7RE", "X89R"])]
+                                      "0d245062-db92-4177-b4f1-396cd6004afb", "366b4c48-7968-423a-96f6-a8a2f76c0ad3"])]
     filename: Annotated[str,
                         Field(..., description="Name of the uploaded file")]
     strategy_used: ChunkingStrategy
     chunk_count: Annotated[int, Field(..., description="Number of vector chunks to be generated", gt=0, examples=[
                                       453, 101, 90])]
-    message: Annotated[str, Field(
+    message: Annotated[Optional[str], Field(
         default="Document successfully ingested and indexed.")]
 
 
