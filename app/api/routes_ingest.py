@@ -22,7 +22,7 @@ async def ingest_document(
         chunks = ChunkingService.chunk_document(
             text=raw_text, strategy=strategy.value)
     except ValueError as err:
-        print(f"Error while ingesting: {err}")
+        # print(f"Error while ingesting: {err}")
         raise HTTPException(status_code=400, detail=str(err))
 
     if not file.filename:
