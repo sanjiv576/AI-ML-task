@@ -29,7 +29,7 @@ class ChunkingService:
         return chunks
 
     @staticmethod
-    def token_chunking(text: str, model_name:  str = "gpt-5.2", max_token: int = 256, overlap_tokens: int = 30) -> List[str]:
+    def token_chunking(text: str, model_name:  str = "text-embedding-3-small", max_token: int = 256, overlap_tokens: int = 30) -> List[str]:
         """splits the text by acutal LLM tokens 
 
         Args:
@@ -51,7 +51,7 @@ class ChunkingService:
         start = 0
         chunks = []
 
-        while start < len(text):
+        while start < len(tokens):
             end = start + max_token
             chunk_tokens = tokens[start:end]
             chunks.append(tokenizer.decode(chunk_tokens))
@@ -59,7 +59,7 @@ class ChunkingService:
 
         return chunks
 
-    @staticmethod
+    @classmethod
     def chunk_document(cls, text: str, strategy: str) -> List[str]:
         if strategy == 'fixed':
             return cls.fixed_character_chunking(text)
